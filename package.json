@@ -13,6 +13,7 @@
     "build:watch": "tsc -w",
     "lint:list": "eslint */**/*.js --fix",
     "lint": "eslint */**/*.js --fix",
+    "lint:src": "eslint src/**/*.ts --fix",
     "start:prod": "nodemon src/index.ts"
   },
   "keywords": [
@@ -38,6 +39,7 @@
     "axios": "^0.19.0",
     "moment": "^2.24.0",
     "query-string": "^6.8.3",
+    "ts-enum-util": "^4.0.1",
     "ts-jest": "^25.0.0",
     "typescript": "^3.6.3"
   },
