@@ -1,0 +1,8 @@
+src
+tsconfig.json
+tslint.json
+.prettierrc.js
+nodemon.json
+jest.config.js
+.eslintrc.js
+.gitignore
