@@ -14,7 +14,7 @@ export class Encoding extends PropParams<EncodeType> {
 
     public parse(pairStr: string): boolean {
         const pairKV = pairStr.split('=');
-        if (pairKV[0] == 'ROLE') {
+        if (pairKV[0] == 'ENCODING') {
             this._level = $enum(EncodeType).getValueOrDefault(pairKV[1], EncodeType.Unknown);
             return true;
         } else {

@@ -12,14 +12,14 @@ export enum ParticipateLevel {
     Unknown = '',
 }
 
-export class Participation extends PropParams<ParticipateLevel> {
+export class ParticipateStatus extends PropParams<ParticipateLevel> {
     public constructor() {
         super(ParticipateLevel.Unknown);
     }
 
     public parse(pairStr: string): boolean {
         const pairKV = pairStr.split('=');
-        if (pairKV[0] == 'ROLE') {
+        if (pairKV[0] == 'PARTSTAT') {
             this._level = $enum(ParticipateLevel).getValueOrDefault(pairKV[1], ParticipateLevel.Unknown);
             return true;
         } else {

@@ -14,7 +14,7 @@ export class Transparency extends PropParams<TransparentLevel> {
 
     public parse(pairStr: string): boolean {
         const pairKV = pairStr.split('=');
-        if (pairKV[0] == 'ROLE') {
+        if (pairKV[0] == 'TRANSP') {
             this._level = $enum(TransparentLevel).getValueOrDefault(pairKV[1], TransparentLevel.Unknown);
             return true;
         } else {
