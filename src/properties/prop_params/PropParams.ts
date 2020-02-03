@@ -2,8 +2,9 @@ import { RoleLevel } from './Role';
 import { ClassLevel } from './Classification';
 import { EncodeType } from './Encoding';
 import { ParticipateLevel } from './Participation';
+import { CalUserType } from './UserType';
 
-export abstract class PropParams<T extends string | RoleLevel | ClassLevel | EncodeType | ParticipateLevel> {
+export abstract class PropParams<T extends string | RoleLevel | ClassLevel | EncodeType | ParticipateLevel | CalUserType> {
     protected _level: T;
     protected constructor(level: T) {
         this._level = level;
