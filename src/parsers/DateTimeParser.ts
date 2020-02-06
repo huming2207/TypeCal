@@ -29,5 +29,5 @@ export class DateTimeParser implements SubParser<Date> {
         }
     };
 
-    public valueNames = ['DTEND', 'DUE', 'DTSTART', 'DURATION'];
+    public propNames = ['DTEND', 'DUE', 'DTSTART', 'DURATION', 'LAST-MODIFIED', 'DTSTAMP'];
 }
