@@ -12,6 +12,7 @@ export class EventComponent {
     private _class = '';
     private _categories = '';
     private _transp = '';
+    private _location = '';
 
     private stringParser = new StringParser();
     private numberParser = new NumberParser();
@@ -55,6 +56,14 @@ export class EventComponent {
 
     public set transparency(val: string) {
         this._transp = val;
+    }
+
+    public get location(): string {
+        return this._location;
+    }
+
+    public set location(val: string) {
+        this._location = val;
     }
 
     public get creationTime(): Date {
