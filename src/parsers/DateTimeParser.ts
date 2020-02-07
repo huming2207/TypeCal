@@ -18,7 +18,6 @@ export class DateTimeParser implements SubParser<Date> {
                 .toJSDate();
         } else if (/\d+T\d+Z/.test(rawStr)) {
             // For most of the scenarios, e.g. DTSTART:19970714T133000Z
-            console.log(DateTime.fromFormatExplain(rawStr, "yyyyMMdd'T'HHmmss'Z'"));
             return DateTime.fromFormat(rawStr, "yyyyMMdd'T'HHmmss'Z'")
                 .setZone('UTC')
                 .toJSDate();
