@@ -23,9 +23,7 @@ export class DateTimeParser implements SubParser<Date> {
                 .toJSDate();
         } else {
             // For "floating timezone" scenarios e.g. DTSTART:19980116T061000
-            return DateTime.fromFormat(rawStr, "yyyyMMdd'T'HHmmss")
-                .setZone('UTC')
-                .toJSDate();
+            return DateTime.fromFormat(rawStr, "yyyyMMdd'T'HHmmss").toJSDate();
         }
     };
 
