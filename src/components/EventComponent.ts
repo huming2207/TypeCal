@@ -4,8 +4,9 @@ import { StringHelper } from '../common/StringHelper';
 import { NumberParser } from '../parsers/NumberParser';
 import { CalAddress } from '../properties/CalAddress';
 import { CalAddressParser } from '../parsers/CalAddressParser';
+import { Component } from './Component';
 
-export class EventComponent {
+export class EventComponent implements Component {
     private _uid = '';
     private _dtStamp: Date = new Date('invalid');
     private _dtStart: Date = new Date('invalid');
