@@ -13,14 +13,10 @@ export class DateTimeParser implements SubParser<Date> {
             if (tzid === null) throw SyntaxError(`Cannot parse DateTime property: ${rawStr}, invalid TZID.`);
             const tzidStr = tzid[0].replace('-', '/'); // Replace some old-school TZID value like "US-Eastern"
             const dateStr = rawStr.split(':');
-            return DateTime.fromFormat(dateStr[dateStr.length - 1], "yyyyMMdd'T'HHmmss")
-                .setZone(tzidStr)
-                .toJSDate();
+            return DateTime.fromFormat(dateStr[dateStr.length - 1], "yyyyMMdd'T'HHmmss", { zone: tzidStr, setZone: true }).toJSDate();
         } else if (/\d+T\d+Z/.test(rawStr)) {
             // For most of the scenarios, e.g. DTSTART:19970714T133000Z
-            return DateTime.fromFormat(rawStr, "yyyyMMdd'T'HHmmss'Z'")
-                .setZone('UTC')
-                .toJSDate();
+            return DateTime.fromFormat(rawStr, "yyyyMMdd'T'HHmmss'Z'", { zone: 'UTC', setZone: true }).toJSDate();
         } else {
             // For "floating timezone" scenarios e.g. DTSTART:19980116T061000
             return DateTime.fromFormat(rawStr, "yyyyMMdd'T'HHmmss").toJSDate();
