@@ -8,10 +8,11 @@ export class CalAddressParser implements SubParser<CalAddress> {
         const itemKV = new Map<string, string>();
         for (const itemStr of itemStrs) {
             const item = itemStr.split('=');
-            if (item.length != 2) {
-                throw new SyntaxError(`Invalid item length: ${itemStr}, ${item}`);
+            if (item.length < 2) {
+                itemKV.set('CN', item[0]); // For some scenarios like "ATTENDEE:mailto:xyz@foobar.com"
+            } else {
+                itemKV.set(item[0], item[1]);
             }
-            itemKV.set(item[0], item[1]);
         }
 
         const calAddr = new CalAddress();
@@ -24,8 +25,8 @@ export class CalAddressParser implements SubParser<CalAddress> {
             const calVal = itemKV.get(calKey);
             if (calVal === undefined) return;
 
-            if (typeof (this as any)[key] === 'string') {
-                (this as any)[key] = calVal;
+            if (typeof (calAddr as any)[key] === 'string') {
+                (calAddr as any)[key] = calVal;
             }
         });
         /* eslint-enable @typescript-eslint/no-explicit-any */
