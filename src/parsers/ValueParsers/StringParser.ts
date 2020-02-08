@@ -1,6 +1,6 @@
-import { SubParser } from './SubParser';
+import { ValueParser } from './ValueParser';
 
-export class StringParser implements SubParser<string> {
+export class StringParser implements ValueParser<string> {
     public parse = (rawStr: string): string => {
         return rawStr
             .replace(/\\;/g, ';')

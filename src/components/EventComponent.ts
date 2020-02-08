@@ -1,12 +1,6 @@
-import { StringParser } from '../parsers/StringParser';
-import { DateTimeParser } from '../parsers/DateTimeParser';
-import { StringHelper } from '../common/StringHelper';
-import { NumberParser } from '../parsers/NumberParser';
 import { CalAddress } from '../properties/CalAddress';
-import { CalAddressParser } from '../parsers/CalAddressParser';
-import { Component } from './Component';
 
-export class EventComponent implements Component {
+export class EventComponent {
     private _uid = '';
     private _dtStamp: Date = new Date('invalid');
     private _dtStart: Date = new Date('invalid');
@@ -17,11 +11,6 @@ export class EventComponent implements Component {
     private _transp = '';
     private _location = '';
     private _attendee: CalAddress[] = [];
-
-    private stringParser = new StringParser();
-    private numberParser = new NumberParser();
-    private dateTimeParser = new DateTimeParser();
-    private calAddrParser = new CalAddressParser();
 
     public get uid(): string {
         return this._uid;
@@ -93,61 +82,5 @@ export class EventComponent implements Component {
 
     public set endTime(val: Date) {
         this._dtEnd = val;
-    }
-
-    public parseComponent = (rawStr: string): void => {
-        const unwrapStr = rawStr.replace(/\n\s/gm, '');
-        const lines = StringHelper.splitNonEmpty(unwrapStr, '\n');
-        const kvPair = new Map<string, string[]>();
-        let isInSubComponent = false;
-        for (const currLine of lines) {
-            // Split from something like "UID:foobar:baz" to "UID" and "foobar:baz"
-            const key = currLine.split(/\;|\:/g, 1)[0];
-
-            // Skip all sub-components
-            if (key === 'BEGIN') isInSubComponent = true;
-            if (key === 'END') isInSubComponent = false;
-            if (isInSubComponent) continue;
-
-            // Get value
-            const val = currLine.substring(currLine.indexOf(key) + key.length + 1);
-
-            // In case some keys (e.g. ANTENDEE) are duplicated...
-            const valInMap = kvPair.get(key);
-            if (valInMap === undefined) {
-                kvPair.set(key, [val]);
-            } else {
-                valInMap.push(val);
-                kvPair.set(key, valInMap);
-            }
-        }
-
-        Object.keys(this).forEach((key: string) => {
-            if (!key.startsWith('_')) return;
-
-            const calKey = key.substring(1).toUpperCase();
-            const calVal = kvPair.get(calKey);
-            if (calVal === undefined) return;
-
-            /* eslint-disable @typescript-eslint/no-explicit-any */
-            if (typeof (this as any)[key] === 'string') {
-                (this as any)[key] = this.stringParser.parse(calVal[0]);
-            } else if (typeof (this as any)[key] === 'number') {
-                (this as any)[key] = this.numberParser.parse(calVal[0]);
-            } else if (typeof (this as any)[key] === 'object') {
-                if (this.dateTimeParser.propNames.includes(calKey)) {
-                    (this as any)[key] = this.dateTimeParser.parse(calVal[0]);
-                } else if (this.calAddrParser.propNames.includes(calKey)) {
-                    for (const calCurrVal of calVal) {
-                        (this as any)[key].push(this.calAddrParser.parse(calCurrVal));
-                    }
-                }
-            }
-            /* eslint-enable @typescript-eslint/no-explicit-any */
-        });
-    };
-
-    constructor(rawStr = '') {
-        if (rawStr.length > 0) this.parseComponent(rawStr);
     }
 }

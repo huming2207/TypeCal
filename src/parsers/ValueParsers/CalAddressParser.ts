@@ -1,7 +1,7 @@
-import { SubParser } from './SubParser';
-import { CalAddress } from '../properties/CalAddress';
+import { ValueParser } from './ValueParser';
+import { CalAddress } from '../../properties/CalAddress';
 
-export class CalAddressParser implements SubParser<CalAddress> {
+export class CalAddressParser implements ValueParser<CalAddress> {
     public parse = (rawStr: string): CalAddress => {
         const itemStrs = rawStr.match(/(\\.|[^;])+/g);
         if (itemStrs === null) throw new SyntaxError(`Seems like it's not a CalAddress type: ${rawStr}`);

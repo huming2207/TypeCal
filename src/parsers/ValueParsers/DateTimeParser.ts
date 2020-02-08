@@ -1,7 +1,7 @@
-import { SubParser } from './SubParser';
+import { ValueParser } from './ValueParser';
 import { DateTime } from 'luxon';
 
-export class DateTimeParser implements SubParser<Date> {
+export class DateTimeParser implements ValueParser<Date> {
     public parse = (rawStr: string): Date => {
         if (rawStr.includes(';VALUE=DATE:')) {
             // Parse date-only scenario, e.g. something like "DTEND;VALUE=DATE:19980704"

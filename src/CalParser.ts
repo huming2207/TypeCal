@@ -1,8 +1,10 @@
-import { ComponentType } from './components/ComponentType';
+import { ComponentType } from './components/Component';
 import { EventComponent } from './components/EventComponent';
+import { EventParser } from './parsers/ComponentParsers/EventParser';
 
 export class CalParser {
     private _events: EventComponent[] = [];
+
     private findComponents = (rawStr: string, type: ComponentType): string[] => {
         let beginIndex = 0;
         let endIndex = 0;
@@ -21,13 +23,20 @@ export class CalParser {
 
     public parseCal = (str: string): void => {
         const lfStr = str.replace('\r', '');
+        const eventParser = new EventParser();
         const vevents = this.findComponents(lfStr, ComponentType.Event);
         for (const vevent of vevents) {
-            this._events.push(new EventComponent(vevent));
+            this._events.push(eventParser.parseComponent(vevent));
         }
     };
 
     public get events(): EventComponent {
         return this.events;
     }
+
+    public toJson = (): string => {
+        return JSON.stringify({
+            events: this._events,
+        }).replace(/\"_/g, '"');
+    };
 }

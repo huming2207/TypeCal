@@ -6,7 +6,3 @@ export enum ComponentType {
     Journal = 'VJOURNAL',
     Timezone = 'VTIMEZONE',
 }
-
-export interface Component {
-    parseComponent(rawStr: string): void;
-}

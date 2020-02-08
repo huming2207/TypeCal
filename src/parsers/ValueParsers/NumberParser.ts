@@ -1,6 +1,6 @@
-import { SubParser } from './SubParser';
+import { ValueParser } from './ValueParser';
 
-export class NumberParser implements SubParser<number> {
+export class NumberParser implements ValueParser<number> {
     public parse = (rawStr: string): number => {
         return Number(rawStr);
     };
