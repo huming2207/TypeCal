@@ -2,6 +2,8 @@ import { StringParser } from '../parsers/StringParser';
 import { DateTimeParser } from '../parsers/DateTimeParser';
 import { StringHelper } from '../common/StringHelper';
 import { NumberParser } from '../parsers/NumberParser';
+import { CalAddress } from '../properties/CalAddress';
+import { CalAddressParser } from '../parsers/CalAddressParser';
 
 export class EventComponent {
     private _uid = '';
@@ -13,10 +15,12 @@ export class EventComponent {
     private _categories = '';
     private _transp = '';
     private _location = '';
+    private _attendee: CalAddress[] = [];
 
     private stringParser = new StringParser();
     private numberParser = new NumberParser();
     private dateTimeParser = new DateTimeParser();
+    private calAddrParser = new CalAddressParser();
 
     public get uid(): string {
         return this._uid;
@@ -91,12 +95,14 @@ export class EventComponent {
     }
 
     public parseComponent = (rawStr: string): void => {
-        const unwrapStr = rawStr.replace(/\n\s/, '');
+        const unwrapStr = rawStr.replace(/\n\s/gm, '');
         const lines = StringHelper.splitNonEmpty(unwrapStr, '\n');
         const kvPair = new Map<string, string>();
         for (const currLine of lines) {
             // Split from something like "UID:foobar:baz" to "UID" and "foobar:baz"
-            kvPair.set(currLine.substring(0, currLine.indexOf(':')), currLine.substring(currLine.indexOf(':') + 1));
+            const key = currLine.split(/\;|\:/g, 1)[0];
+            const val = currLine.substring(currLine.indexOf(key) + key.length + 1);
+            kvPair.set(key, val);
         }
 
         Object.keys(this).forEach((key: string) => {
@@ -114,6 +120,8 @@ export class EventComponent {
             } else if (typeof (this as any)[key] === 'object') {
                 if (this.dateTimeParser.propNames.includes(calKey)) {
                     (this as any)[key] = this.dateTimeParser.parse(calVal);
+                } else if (this.calAddrParser.propNames.includes(calKey)) {
+                    (this as any)[key].push(this.calAddrParser.parse(calVal));
                 }
             }
             /* eslint-enable @typescript-eslint/no-explicit-any */
