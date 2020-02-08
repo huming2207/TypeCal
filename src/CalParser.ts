@@ -1,5 +1,5 @@
 import { ComponentType } from './components/ComponentType';
-import { EventComponent } from './EventComponent';
+import { EventComponent } from './components/EventComponent';
 
 export class CalParser {
     private _events: EventComponent[] = [];

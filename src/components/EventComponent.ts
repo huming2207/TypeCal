@@ -1,7 +1,7 @@
-import { StringParser } from './parsers/StringParser';
-import { DateTimeParser } from './parsers/DateTimeParser';
-import { StringHelper } from './common/StringHelper';
-import { NumberParser } from './parsers/NumberParser';
+import { StringParser } from '../parsers/StringParser';
+import { DateTimeParser } from '../parsers/DateTimeParser';
+import { StringHelper } from '../common/StringHelper';
+import { NumberParser } from '../parsers/NumberParser';
 
 export class EventComponent {
     private _uid = '';
