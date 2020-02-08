@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 
 export class DateTimeParser implements ValueParser<Date> {
     public parse = (rawStr: string): Date => {
-        if (rawStr.includes(';VALUE=DATE:')) {
+        if (rawStr.includes('VALUE=DATE:')) {
             // Parse date-only scenario, e.g. something like "DTEND;VALUE=DATE:19980704"
             const dateStr = rawStr.split(':');
             return DateTime.fromFormat(dateStr[dateStr.length - 1], 'yyyyMMdd').toJSDate();
