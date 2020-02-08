@@ -1,8 +1,10 @@
 import { ComponentType } from './components/Component';
 import { EventComponent } from './components/EventComponent';
 import { EventParser } from './parsers/ComponentParsers/EventParser';
+import { Serialize, serializeAs } from 'cerialize';
 
 export class CalParser {
+    @serializeAs('events')
     private _events: EventComponent[] = [];
 
     private findComponents = (rawStr: string, type: ComponentType): string[] => {
@@ -30,13 +32,12 @@ export class CalParser {
         }
     };
 
-    public get events(): EventComponent {
-        return this.events;
+    public get events(): EventComponent[] {
+        return this._events;
     }
 
     public toJson = (): string => {
-        return JSON.stringify({
-            events: this._events,
-        }).replace(/\"_/g, '"');
+        const serialized = Serialize(this._events);
+        return JSON.stringify(serialized);
     };
 }
