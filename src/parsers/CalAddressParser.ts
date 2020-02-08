@@ -5,13 +5,13 @@ export class CalAddressParser implements SubParser<CalAddress> {
     public parse = (rawStr: string): CalAddress => {
         const itemStrs = rawStr.match(/(\\.|[^;])+/g);
         if (itemStrs === null) throw new SyntaxError(`Seems like it's not a CalAddress type: ${rawStr}`);
-        const itemKV = new Map<string, string>();
+        const itemKV: { [key: string]: string } = {};
         for (const itemStr of itemStrs) {
             const item = itemStr.split('=');
             if (item.length < 2) {
-                itemKV.set('CN', item[0]); // For some scenarios like "ATTENDEE:mailto:xyz@foobar.com"
+                itemKV['CN'] = item[0]; // For some scenarios like "ATTENDEE:mailto:xyz@foobar.com"
             } else {
-                itemKV.set(item[0], item[1]);
+                itemKV[item[0]] = item[1];
             }
         }
 
@@ -22,7 +22,7 @@ export class CalAddressParser implements SubParser<CalAddress> {
             if (!key.startsWith('_')) return;
 
             const calKey = key.substring(1).toUpperCase();
-            const calVal = itemKV.get(calKey);
+            const calVal = itemKV[calKey];
             if (calVal === undefined) return;
 
             if (typeof (calAddr as any)[key] === 'string') {

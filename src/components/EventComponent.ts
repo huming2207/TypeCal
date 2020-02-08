@@ -97,12 +97,20 @@ export class EventComponent {
     public parseComponent = (rawStr: string): void => {
         const unwrapStr = rawStr.replace(/\n\s/gm, '');
         const lines = StringHelper.splitNonEmpty(unwrapStr, '\n');
-        const kvPair = new Map<string, string>();
+        const kvPair = new Map<string, string[]>();
         for (const currLine of lines) {
             // Split from something like "UID:foobar:baz" to "UID" and "foobar:baz"
             const key = currLine.split(/\;|\:/g, 1)[0];
             const val = currLine.substring(currLine.indexOf(key) + key.length + 1);
-            kvPair.set(key, val);
+            const valInMap = kvPair.get(key);
+
+            // In case some keys (e.g. ANTENDEE) are duplicated...
+            if (valInMap === undefined) {
+                kvPair.set(key, [val]);
+            } else {
+                valInMap.push(val);
+                kvPair.set(key, valInMap);
+            }
         }
 
         Object.keys(this).forEach((key: string) => {
@@ -114,14 +122,16 @@ export class EventComponent {
 
             /* eslint-disable @typescript-eslint/no-explicit-any */
             if (typeof (this as any)[key] === 'string') {
-                (this as any)[key] = this.stringParser.parse(calVal);
+                (this as any)[key] = this.stringParser.parse(calVal[0]);
             } else if (typeof (this as any)[key] === 'number') {
-                (this as any)[key] = this.numberParser.parse(calVal);
+                (this as any)[key] = this.numberParser.parse(calVal[0]);
             } else if (typeof (this as any)[key] === 'object') {
                 if (this.dateTimeParser.propNames.includes(calKey)) {
-                    (this as any)[key] = this.dateTimeParser.parse(calVal);
+                    (this as any)[key] = this.dateTimeParser.parse(calVal[0]);
                 } else if (this.calAddrParser.propNames.includes(calKey)) {
-                    (this as any)[key].push(this.calAddrParser.parse(calVal));
+                    for (const calCurrVal of calVal) {
+                        (this as any)[key].push(this.calAddrParser.parse(calCurrVal));
+                    }
                 }
             }
             /* eslint-enable @typescript-eslint/no-explicit-any */
