@@ -99,13 +99,21 @@ export class EventComponent implements Component {
         const unwrapStr = rawStr.replace(/\n\s/gm, '');
         const lines = StringHelper.splitNonEmpty(unwrapStr, '\n');
         const kvPair = new Map<string, string[]>();
+        let isInSubComponent = false;
         for (const currLine of lines) {
             // Split from something like "UID:foobar:baz" to "UID" and "foobar:baz"
             const key = currLine.split(/\;|\:/g, 1)[0];
+
+            // Skip all sub-components
+            if (key === 'BEGIN') isInSubComponent = true;
+            if (key === 'END') isInSubComponent = false;
+            if (isInSubComponent) continue;
+
+            // Get value
             const val = currLine.substring(currLine.indexOf(key) + key.length + 1);
-            const valInMap = kvPair.get(key);
 
             // In case some keys (e.g. ANTENDEE) are duplicated...
+            const valInMap = kvPair.get(key);
             if (valInMap === undefined) {
                 kvPair.set(key, [val]);
             } else {
