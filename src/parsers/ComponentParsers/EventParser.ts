@@ -6,7 +6,7 @@ import { NumberParser } from '../ValueParsers/NumberParser';
 import { DateTimeParser } from '../ValueParsers/DateTimeParser';
 import { CalAddressParser } from '../ValueParsers/CalAddressParser';
 
-export class EventParser implements ComponentParser<EventComponent> {
+export class EventParser extends ComponentParser<EventComponent> {
     private stringParser = new StringParser();
     private numberParser = new NumberParser();
     private dateTimeParser = new DateTimeParser();
