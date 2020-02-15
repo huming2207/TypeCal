@@ -4,18 +4,27 @@ import { StringParser } from '../ValueParsers/StringParser';
 import { NumberParser } from '../ValueParsers/NumberParser';
 import { DateTimeParser } from '../ValueParsers/DateTimeParser';
 import { CalAddressParser } from '../ValueParsers/CalAddressParser';
+import { ComponentType } from '../../components/Component';
+import { AlarmParser } from './AlarmParser';
 
 export class EventParser extends ComponentParser<EventComponent> {
     private stringParser = new StringParser();
     private numberParser = new NumberParser();
     private dateTimeParser = new DateTimeParser();
     private calAddrParser = new CalAddressParser();
+    private alarmParser = new AlarmParser();
 
     public parseComponent = (rawStr: string): EventComponent => {
-        const unwrapStr = rawStr.replace(/\n\s/gm, '');
-        const kvPair = ComponentParser.strToKvPairs(unwrapStr);
-
         const eventComponent = new EventComponent();
+        const unwrapStr = rawStr.replace(/\n\s/gm, '');
+
+        // Try find and parse VALARMs in this VEVENT
+        const rawAlarmStrs = ComponentParser.findComponents(rawStr, ComponentType.Alarm);
+        for (const rawAlarmStr of rawAlarmStrs) {
+            eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
+        }
+
+        const kvPair = ComponentParser.strToKvPairs(unwrapStr);
         Object.keys(eventComponent).forEach((key: string) => {
             if (!key.startsWith('_')) return;
 
