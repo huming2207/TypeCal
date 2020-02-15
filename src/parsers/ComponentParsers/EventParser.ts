@@ -19,9 +19,11 @@ export class EventParser extends ComponentParser<EventComponent> {
         const unwrapStr = rawStr.replace(/\n\s/gm, '');
 
         // Try find and parse VALARMs in this VEVENT
-        const rawAlarmStrs = ComponentParser.findComponents(rawStr, ComponentType.Alarm);
-        for (const rawAlarmStr of rawAlarmStrs) {
-            eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
+        if (rawStr.includes('BEGIN:VALARM') && rawStr.includes('END:VALARM')) {
+            const rawAlarmStrs = ComponentParser.findComponents(rawStr, ComponentType.Alarm);
+            for (const rawAlarmStr of rawAlarmStrs) {
+                eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
+            }
         }
 
         const kvPair = ComponentParser.strToKvPairs(unwrapStr);

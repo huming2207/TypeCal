@@ -22,12 +22,16 @@ export class DurationParser implements ValueParser<CalDuration> {
             calDuration.atDate = dateTime.toJSDate();
         } else {
             // Scenario 3: Assume it's a duration-only scenario
-            const durationStr = rawStr.split(':', 2)[1];
+            const neg = rawStr.startsWith('-');
+            const durationStr = neg ? rawStr.substring(1) : rawStr;
             const duration = Duration.fromISO(durationStr)
                 .shiftTo('seconds')
-                .toObject().seconds;
-            if (duration === undefined) throw SyntaxError(`Cannot parse CalDuration property: ${rawStr}, invalid duration.`);
-            calDuration.durationSec = duration;
+                .toObject();
+            const durationSec = duration.seconds;
+            if (durationSec === undefined) {
+                throw SyntaxError(`Cannot parse CalDuration property: ${rawStr}, invalid duration.`);
+            }
+            calDuration.durationSec = neg ? durationSec * -1 : durationSec;
         }
 
         return calDuration;
