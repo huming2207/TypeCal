@@ -13,6 +13,7 @@ export abstract class ComponentParser<T> {
         while (beginIndex != -1 && endIndex != -1) {
             beginIndex = rawStr.indexOf(beginStr, beginIndex + 1) + beginStr.length;
             endIndex = rawStr.indexOf(endStr, endIndex + 1);
+            if (beginIndex >= endIndex) break;
             rawComponents.push(rawStr.substring(beginIndex + 1, endIndex));
         }
 
