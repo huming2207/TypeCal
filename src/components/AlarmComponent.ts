@@ -1,8 +1,8 @@
 import { CalDuration } from '../properties/CalDuration';
-import { serializeAs } from 'cerialize';
+import { autoserializeAs } from 'cerialize';
 
 export class AlarmComponent {
-    @serializeAs('trigger')
+    @autoserializeAs('trigger')
     private _trigger: CalDuration = new CalDuration();
 
     public get trigger(): CalDuration {
@@ -13,7 +13,7 @@ export class AlarmComponent {
         this._trigger = value;
     }
 
-    @serializeAs('repeat')
+    @autoserializeAs('repeat')
     private _repeat = 0;
 
     public get repeat(): number {
@@ -24,7 +24,7 @@ export class AlarmComponent {
         this._repeat = value;
     }
 
-    @serializeAs('duration')
+    @autoserializeAs('duration')
     private _duration: CalDuration = new CalDuration();
 
     public get duration(): CalDuration {
@@ -35,7 +35,7 @@ export class AlarmComponent {
         this._duration = value;
     }
 
-    @serializeAs('action')
+    @autoserializeAs('action')
     private _action = '';
 
     public get action(): string {
@@ -46,7 +46,7 @@ export class AlarmComponent {
         this._action = value;
     }
 
-    @serializeAs('description')
+    @autoserializeAs('description')
     private _description = '';
 
     public get description(): string {

@@ -1,7 +1,7 @@
-import { serializeAs } from 'cerialize';
+import { autoserializeAs } from 'cerialize';
 
 export class CalAddress {
-    @serializeAs('displayName')
+    @autoserializeAs('displayName')
     private _cn = '';
 
     public get displayName(): string {
@@ -12,7 +12,7 @@ export class CalAddress {
         this._cn = value;
     }
 
-    @serializeAs('calUserType')
+    @autoserializeAs('calUserType')
     private _cuType = '';
 
     public get calUserType(): string {
@@ -23,7 +23,7 @@ export class CalAddress {
         this._cuType = value;
     }
 
-    @serializeAs('role')
+    @autoserializeAs('role')
     private _role = '';
 
     public get role(): string {
@@ -34,7 +34,7 @@ export class CalAddress {
         this._role = value;
     }
 
-    @serializeAs('partState')
+    @autoserializeAs('partState')
     private _partStat = '';
 
     public get partState(): string {
@@ -45,7 +45,7 @@ export class CalAddress {
         this._partStat = value;
     }
 
-    @serializeAs('delegateFrom')
+    @autoserializeAs('delegateFrom')
     private _delegateFrom = '';
 
     public get delegateFrom(): string {
@@ -56,7 +56,7 @@ export class CalAddress {
         this._delegateFrom = value;
     }
 
-    @serializeAs('delegateTo')
+    @autoserializeAs('delegateTo')
     private _delegateTo = '';
 
     public get delegateTo(): string {
@@ -67,7 +67,7 @@ export class CalAddress {
         this._delegateTo = value;
     }
 
-    @serializeAs('sentBy')
+    @autoserializeAs('sentBy')
     private _sentBy = '';
 
     public get sentBy(): string {
@@ -78,7 +78,7 @@ export class CalAddress {
         this._sentBy = value;
     }
 
-    @serializeAs('member')
+    @autoserializeAs('member')
     private _member = '';
 
     public get member(): string {
@@ -89,7 +89,7 @@ export class CalAddress {
         this._member = value;
     }
 
-    @serializeAs('rsvp')
+    @autoserializeAs('rsvp')
     private _rsvp = '';
 
     public get rsvp(): string {

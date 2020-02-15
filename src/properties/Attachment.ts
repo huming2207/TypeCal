@@ -1,7 +1,7 @@
-import { serializeAs } from 'cerialize';
+import { autoserializeAs } from 'cerialize';
 
 export class Attachment {
-    @serializeAs('mimeType')
+    @autoserializeAs('mimeType')
     private _mimeType = '';
 
     public get mimeType(): string {
@@ -12,7 +12,7 @@ export class Attachment {
         this._mimeType = value;
     }
 
-    @serializeAs('url')
+    @autoserializeAs('url')
     private _url = '';
 
     public get url(): string {

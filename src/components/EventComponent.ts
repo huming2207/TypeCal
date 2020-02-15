@@ -1,10 +1,10 @@
 import { CalAddress } from '../properties/CalAddress';
-import { serializeAs, autoserializeAs } from 'cerialize';
+import { autoserializeAs } from 'cerialize';
 import { DateSerializer } from '../common/DateSerializer';
 import { AlarmComponent } from './AlarmComponent';
 
 export class EventComponent {
-    @serializeAs('uid')
+    @autoserializeAs('uid')
     private _uid = '';
 
     @autoserializeAs(DateSerializer, 'dtStamp')
@@ -16,25 +16,25 @@ export class EventComponent {
     @autoserializeAs(DateSerializer, 'dtEnd')
     private _dtEnd: Date = new Date(2000, 1, 1);
 
-    @serializeAs('summary')
+    @autoserializeAs('summary')
     private _summary = '';
 
-    @serializeAs('class')
+    @autoserializeAs('class')
     private _class = '';
 
-    @serializeAs('categories')
+    @autoserializeAs('categories')
     private _categories = '';
 
-    @serializeAs('trasp')
+    @autoserializeAs('trasp')
     private _transp = '';
 
-    @serializeAs('location')
+    @autoserializeAs('location')
     private _location = '';
 
-    @serializeAs('attendees')
+    @autoserializeAs('attendees')
     private _attendee: CalAddress[] = [];
 
-    @serializeAs('alarms')
+    @autoserializeAs('alarms')
     private alarms_: AlarmComponent[] = [];
 
     public get uid(): string {
