@@ -5,22 +5,31 @@ import { DateSerializer } from '../common/DateSerializer';
 export class EventComponent {
     @serializeAs('uid')
     private _uid = '';
+
     @autoserializeAs(DateSerializer, 'dtStamp')
     private _dtStamp: Date = new Date(1970, 1, 1);
+
     @autoserializeAs(DateSerializer, 'dtStart')
     private _dtStart: Date = new Date(1970, 1, 1);
+
     @autoserializeAs(DateSerializer, 'dtEnd')
     private _dtEnd: Date = new Date(2000, 1, 1);
+
     @serializeAs('summary')
     private _summary = '';
+
     @serializeAs('class')
     private _class = '';
+
     @serializeAs('categories')
     private _categories = '';
+
     @serializeAs('trasp')
     private _transp = '';
+
     @serializeAs('location')
     private _location = '';
+
     @serializeAs('attendees')
     private _attendee: CalAddress[] = [];
 
@@ -94,5 +103,13 @@ export class EventComponent {
 
     public set endTime(val: Date) {
         this._dtEnd = val;
+    }
+
+    public get attendees(): CalAddress[] {
+        return this._attendee;
+    }
+
+    public set attendees(val: CalAddress[]) {
+        this._attendee = val;
     }
 }
