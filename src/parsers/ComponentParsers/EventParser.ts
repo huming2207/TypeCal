@@ -13,7 +13,7 @@ export class EventParser extends ComponentParser<EventComponent> {
 
     public parseComponent = (rawStr: string): EventComponent => {
         const unwrapStr = rawStr.replace(/\n\s/gm, '');
-        const kvPair = EventParser.strToKvPairs(unwrapStr);
+        const kvPair = ComponentParser.strToKvPairs(unwrapStr);
 
         const eventComponent = new EventComponent();
         Object.keys(eventComponent).forEach((key: string) => {
