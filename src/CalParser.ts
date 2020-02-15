@@ -3,7 +3,7 @@ import { EventComponent } from './components/EventComponent';
 import { EventParser } from './parsers/ComponentParsers/EventParser';
 import { Serialize, serializeAs } from 'cerialize';
 import { ComponentParser } from './parsers/ComponentParsers/ComponentParser';
-import { StringHelper } from './common/StringHelper';
+import omitEmpty from 'omit-empty';
 
 export class CalParser {
     @serializeAs('events')
@@ -23,8 +23,7 @@ export class CalParser {
     }
 
     public toJson = (): string => {
-        StringHelper.removeEmptyJsonObj(this._events);
         const serialized = Serialize(this._events);
-        return JSON.stringify(serialized);
+        return JSON.stringify(omitEmpty(serialized, { omitZero: false }));
     };
 }
