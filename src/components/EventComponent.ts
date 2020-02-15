@@ -1,6 +1,7 @@
 import { CalAddress } from '../properties/CalAddress';
 import { serializeAs, autoserializeAs } from 'cerialize';
 import { DateSerializer } from '../common/DateSerializer';
+import { AlarmComponent } from './AlarmComponent';
 
 export class EventComponent {
     @serializeAs('uid')
@@ -32,6 +33,9 @@ export class EventComponent {
 
     @serializeAs('attendees')
     private _attendee: CalAddress[] = [];
+
+    @serializeAs('alarms')
+    private alarms_: AlarmComponent[] = [];
 
     public get uid(): string {
         return this._uid;
@@ -111,5 +115,13 @@ export class EventComponent {
 
     public set attendees(val: CalAddress[]) {
         this._attendee = val;
+    }
+
+    public get alarms(): AlarmComponent[] {
+        return this.alarms_;
+    }
+
+    public set alarms(val: AlarmComponent[]) {
+        this.alarms_ = val;
     }
 }
