@@ -14,7 +14,9 @@ export class CalParser {
         const eventParser = new EventParser();
         const vevents = ComponentParser.findComponents(lfStr, ComponentType.Event);
         for (const vevent of vevents) {
-            this._events.push(eventParser.parseComponent(vevent));
+            setImmediate(() => {
+                this._events.push(eventParser.parseComponent(vevent));
+            });
         }
     };
 

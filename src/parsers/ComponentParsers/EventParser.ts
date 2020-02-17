@@ -22,7 +22,9 @@ export class EventParser extends ComponentParser<EventComponent> {
         if (rawStr.includes('BEGIN:VALARM') && rawStr.includes('END:VALARM')) {
             const rawAlarmStrs = ComponentParser.findComponents(rawStr, ComponentType.Alarm);
             for (const rawAlarmStr of rawAlarmStrs) {
-                eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
+                setImmediate(() => {
+                    eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
+                });
             }
         }
 
