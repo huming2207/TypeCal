@@ -13,7 +13,7 @@ cal.parseCal(ical);
 console.log(cal.toJson());
 ```
 
-# Progess
+# Progress
 
 - [x] VEVENT
     - [x] General components
