@@ -43,6 +43,7 @@
     "moment": "^2.24.0",
     "omit-empty": "^1.0.0",
     "query-string": "^6.8.3",
+    "rrule": "^2.6.4",
     "ts-enum-util": "^4.0.1",
     "ts-jest": "^25.0.0",
     "typescript": "^3.6.3"
