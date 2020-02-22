@@ -28,6 +28,22 @@ export abstract class ComponentParser<T> {
         return rawStr.indexOf(`END:${type}`);
     };
 
+    public static lastParsedBegin = (rawStr: string, type: ComponentType): number => {
+        return rawStr.lastIndexOf(`BEGIN:${type}`) + `BEGIN:${type}`.length;
+    };
+
+    public static lastParsedEnd = (rawStr: string, type: ComponentType): number => {
+        return rawStr.lastIndexOf(`END:${type}`) + `END:${type}`.length;
+    };
+
+    public static hasBegin = (rawStr: string, type: ComponentType): boolean => {
+        return ComponentParser.indexOfBegin(rawStr, type) > 0;
+    };
+
+    public static hasValidComponent = (rawStr: string, type: ComponentType): boolean => {
+        return rawStr.includes(`BEGIN:${type}`) && rawStr.includes(`END:${type}`);
+    };
+
     protected static strToKvPairs = (rawStr: string): Map<string, string[]> => {
         const lines = StringHelper.splitNonEmpty(rawStr, '\n');
         const kvPair = new Map<string, string[]>();
