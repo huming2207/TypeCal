@@ -20,6 +20,14 @@ export abstract class ComponentParser<T> {
         return rawComponents;
     };
 
+    public static indexOfBegin = (rawStr: string, type: ComponentType): number => {
+        return rawStr.indexOf(`BEGIN:${type}`);
+    };
+
+    public static indexOfEnd = (rawStr: string, type: ComponentType): number => {
+        return rawStr.indexOf(`END:${type}`);
+    };
+
     protected static strToKvPairs = (rawStr: string): Map<string, string[]> => {
         const lines = StringHelper.splitNonEmpty(rawStr, '\n');
         const kvPair = new Map<string, string[]>();
