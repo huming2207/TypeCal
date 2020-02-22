@@ -2,7 +2,9 @@
 
 Work in Progress
 
-# Getting started
+## Getting started
+
+### Parse from a string (blocking)
 
 ```typescript
 const ical = `BEGIN:VCALENDAR
@@ -13,16 +15,33 @@ cal.parseCal(ical);
 console.log(cal.toJson());
 ```
 
-# Progress
+### Parse from URL
+
+```typescript
+const parser = new CalParser();
+
+parser
+    .fromURL(`https://calendar.google.com/calendar/ical/...(whatever).../basic.ics`)
+    .then(cal => {
+        console.log(parser.toJSON());
+    })
+    .catch(err => {
+        console.log(err);
+    });
+```
+
+## Progress
 
 - [x] VEVENT
     - [x] General components
     - [x] ATTENDEES
-- [ ] VALARM -> WIP, 50%
-- [ ] VTIMEZONE -> WIP
-- [ ] VJOURNAL -> WIP
-- [ ] Parse from HTTP/FS stream (something like `calParser.fromURL()`)
+- [x] VALARM
+- [x] VTIMEZONE (partial, TZID recognition only)
+- [-] VJOURNAL -> WIP
+- [-] VTODO -> WIP
+- [x] Parse from HTTP/FS stream (something like `calParser.fromURL()`)
+- [-] Proper timezone handling -> WIP
 
-# License 
+## License 
 
 MIT
