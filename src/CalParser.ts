@@ -9,6 +9,7 @@ import axios from 'axios';
 import { MSTimezoneLUT } from './common/MSTimezoneLut';
 import { ReadStream } from 'fs';
 import { ParseState } from './common/ParseState';
+import fs from 'fs';
 
 export class CalParser {
     public calendar: Calendar = new Calendar();
@@ -38,6 +39,11 @@ export class CalParser {
 
         const respStream = resp.data as ReadStream;
         return await this.fromReadStream(respStream);
+    };
+
+    public fromFile = async (path: string): Promise<Calendar> => {
+        const fsStream = fs.createReadStream(path);
+        return this.fromReadStream(fsStream);
     };
 
     public fromReadStream = (respStream: ReadStream): Promise<Calendar> => {
