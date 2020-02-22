@@ -20,11 +20,9 @@ export class EventParser extends ComponentParser<EventComponent> {
 
         // Try find and parse VALARMs in this VEVENT
         if (rawStr.includes('BEGIN:VALARM') && rawStr.includes('END:VALARM')) {
-            const rawAlarmStrs = ComponentParser.findComponents(rawStr, ComponentType.Alarm);
-            for (const rawAlarmStr of rawAlarmStrs) {
-                setImmediate(() => {
-                    eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
-                });
+            const rawAlarmResult = ComponentParser.findComponents(rawStr, ComponentType.Alarm);
+            for (const rawAlarmStr of rawAlarmResult.components) {
+                eventComponent.alarms.push(this.alarmParser.parseComponent(rawAlarmStr));
             }
         }
 

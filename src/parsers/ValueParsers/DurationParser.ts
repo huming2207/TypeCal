@@ -29,7 +29,7 @@ export class DurationParser implements ValueParser<CalDuration> {
                 .toObject();
             const durationSec = duration.seconds;
             if (durationSec === undefined) {
-                throw SyntaxError(`Cannot parse CalDuration property: ${rawStr}, invalid duration.`);
+                throw SyntaxError(`Cannot parse CalDuration property: ${durationStr}, invalid duration.`);
             }
             calDuration.durationSec = neg ? durationSec * -1 : durationSec;
         }

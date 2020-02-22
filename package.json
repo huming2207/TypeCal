@@ -37,7 +37,7 @@
     "@types/jest": "^25.0.0",
     "@types/node": "^12.7.11",
     "@types/omit-empty": "^1.0.0",
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "cerialize": "^0.1.18",
     "luxon": "^1.22.0",
     "moment": "^2.24.0",
@@ -46,7 +46,8 @@
     "rrule": "^2.6.4",
     "ts-enum-util": "^4.0.1",
     "ts-jest": "^25.0.0",
-    "typescript": "^3.6.3"
+    "typescript": "^3.6.3",
+    "typestate": "^1.0.6"
   },
   "devDependencies": {
     "@babel/polyfill": "7.8.3",
