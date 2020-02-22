@@ -3,21 +3,23 @@ import { StringHelper } from '../../common/StringHelper';
 
 export abstract class ComponentParser<T> {
     abstract parseComponent(rawStr: string): T;
-    public static findComponents = (rawStr: string, type: ComponentType): string[] => {
+    public static findComponents = (rawStr: string, type: ComponentType): { components: string[]; tailIndex: number } => {
         let beginIndex = 0;
         let endIndex = 0;
+        let validTail = 0;
         const beginStr = `BEGIN:${type}`;
         const endStr = `END:${type}`;
         const rawComponents: string[] = [];
 
-        while (beginIndex != -1 && endIndex != -1) {
+        while (beginIndex >= 0 && endIndex >= 0) {
             beginIndex = rawStr.indexOf(beginStr, beginIndex + 1) + beginStr.length;
             endIndex = rawStr.indexOf(endStr, endIndex + 1);
             if (beginIndex >= endIndex) break;
             rawComponents.push(rawStr.substring(beginIndex + 1, endIndex));
+            validTail = endIndex + `END:${type}`.length;
         }
 
-        return rawComponents;
+        return { components: rawComponents, tailIndex: validTail };
     };
 
     public static indexOfBegin = (rawStr: string, type: ComponentType): number => {
