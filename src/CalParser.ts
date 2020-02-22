@@ -10,10 +10,10 @@ import { MSTimezoneLUT } from './common/MSTimezoneLut';
 import { ReadStream } from 'fs';
 import { ParseState } from './common/ParseState';
 import fs from 'fs';
+import { TimezoneManager } from './common/TimezoneManager';
 
 export class CalParser {
     public calendar: Calendar = new Calendar();
-    private microsoftTz = false;
     private parseState: ParseState = ParseState.ParseInit;
 
     public parseCal = (str: string): void => {
@@ -121,7 +121,7 @@ export class CalParser {
         const pidResult = str.match(/(?<=\nPRODID\:)(.*)/);
         if (pidResult !== null) {
             this.calendar.productId = pidResult[0];
-            this.microsoftTz = this.calendar.productId.includes('Microsoft Exchange Server'); // Use M$'s style timezone LUT
+            TimezoneManager.getInstance().msMode = this.calendar.productId.includes('Microsoft Exchange Server'); // Use M$'s style timezone LUT
             return true;
         } else {
             return false;
@@ -130,9 +130,16 @@ export class CalParser {
 
     private findDefaultTimezone = (str: string): boolean => {
         // Find default timezone (if exists)
+        const tzMgr = TimezoneManager.getInstance();
         const tzResult = str.match(/(((?<=\nTZID\:)|(?<=\nTZID\;VALUE\=TEXT\:)|(?<=\nX-WR-TIMEZONE\:)|(?<=\nX-WR-TIMEZONE\;VALUE\=TEXT\:))(.*))/);
         if (tzResult !== null && DateTime.local().setZone(tzResult[0]).isValid) {
-            this.calendar.timezone = this.microsoftTz ? MSTimezoneLUT.get(tzResult[0].replace('"', '')) : tzResult[0].replace('"', '');
+            if (!tzMgr.msMode) {
+                this.calendar.timezone = tzResult[0].replace('"', '');
+            } else {
+                const lutResult = MSTimezoneLUT.get(tzResult[0].replace('"', ''));
+                this.calendar.timezone = lutResult ? lutResult : 'Etc/GMT';
+            }
+            tzMgr.defaultTimezone = this.calendar.timezone;
             return true;
         } else {
             return false;
