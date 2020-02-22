@@ -16,7 +16,7 @@ export class CalParser {
     private parseState: ParseState = ParseState.ParseInit;
 
     public parseCal = (str: string): void => {
-        const lfStr = str.replace('\r', '');
+        const lfStr = str.replace(/\r\n/g, '\n');
         // Get product ID
         this.findProductId(lfStr);
 
@@ -40,9 +40,8 @@ export class CalParser {
         const eventParser = new EventParser();
         const respStream = resp.data as ReadStream;
         return new Promise<void>((resolve, reject) => {
-            respStream.on('data', async (chunk: Buffer) => {
-                cachedStr += chunk.toString();
-                cachedStr = cachedStr.replace(/\r\n/g, '\n');
+            respStream.on('data', (chunk: Buffer) => {
+                cachedStr += chunk.toString().replace(/\r\n/g, '\n');
                 switch (this.parseState) {
                     case ParseState.ParseInit: {
                         this.parseState = ParseState.ProductId;
