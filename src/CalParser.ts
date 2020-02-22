@@ -26,22 +26,34 @@ export class CalParser {
         // Find out events
         const eventParser = new EventParser();
         const vevents = ComponentParser.findComponents(lfStr, ComponentType.Event);
-        for (const vevent of vevents) {
+        for (const vevent of vevents.components) {
             this.calendar.events.push(eventParser.parseComponent(vevent));
         }
     };
 
-    public fromURL = async (url: string): Promise<void> => {
-        let cachedStr = '';
+    public fromURL = async (url: string): Promise<Calendar> => {
         const resp = await axios.get(url, { responseType: 'stream' }).catch(err => {
             throw err;
         });
 
-        const eventParser = new EventParser();
         const respStream = resp.data as ReadStream;
-        return new Promise<void>((resolve, reject) => {
-            respStream.on('data', (chunk: Buffer) => {
-                cachedStr += chunk.toString().replace(/\r\n/g, '\n');
+        return await this.fromReadStream(respStream);
+    };
+
+    public fromReadStream = (respStream: ReadStream): Promise<Calendar> => {
+        let cachedStr = '';
+        const eventParser = new EventParser();
+        return new Promise<Calendar>((resolve, reject) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            respStream.on('data', (chunk: any) => {
+                if (Buffer.isBuffer(chunk)) {
+                    cachedStr += chunk.toString().replace(/\r\n/g, '\n');
+                } else if (typeof chunk === 'string') {
+                    cachedStr += chunk.replace(/\r\n/g, '\n');
+                } else {
+                    throw new Error('Unsupported stream type, need to be string or Buffer');
+                }
+
                 switch (this.parseState) {
                     case ParseState.ParseInit: {
                         this.parseState = ParseState.ProductId;
@@ -69,11 +81,11 @@ export class CalParser {
                     case ParseState.Event: {
                         if (!ComponentParser.hasBegin(cachedStr, ComponentType.Event)) break; // Just repeat again if there's no BEGIN:VEVENT found
                         const vevents = ComponentParser.findComponents(cachedStr, ComponentType.Event);
-                        for (const vevent of vevents) {
+                        for (const vevent of vevents.components) {
                             this.calendar.events.push(eventParser.parseComponent(vevent));
                         }
 
-                        cachedStr = cachedStr.substring(ComponentParser.lastParsedEnd(cachedStr, ComponentType.Event));
+                        cachedStr = cachedStr.substring(vevents.tailIndex);
                         break;
                     }
 
@@ -89,7 +101,7 @@ export class CalParser {
 
             respStream.on('end', () => {
                 this.parseState = ParseState.Done;
-                resolve();
+                resolve(this.calendar);
             });
         });
     };
