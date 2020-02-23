@@ -15,12 +15,16 @@
     "start:prod": "nodemon src/index.ts"
   },
   "keywords": [
-    "Microsoft",
-    "Azure",
-    "ms",
-    "Microsoft Graph",
-    "msg",
-    "msgraph"
+    "ical",
+    "icalendar",
+    "typescript",
+    "ts",
+    "microsoft",
+    "outlook",
+    "calendar",
+    "time",
+    "gmail",
+    "rfc5455"
   ],
   "author": "Jackson Ming Hu <huming2207@gmail.com>",
   "license": "MIT",
