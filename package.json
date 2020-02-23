@@ -11,9 +11,7 @@
     "coverage": "jest --collectCoverageFrom=src/**.js --coverage",
     "build": "tsc",
     "build:watch": "tsc -w",
-    "lint:list": "eslint */**/*.js --fix",
-    "lint": "eslint */**/*.js --fix",
-    "lint:src": "eslint src/**/*.ts --fix",
+    "lint": "eslint src/**/*.ts --fix",
     "start:prod": "nodemon src/index.ts"
   },
   "keywords": [
