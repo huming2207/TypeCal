@@ -14,7 +14,6 @@ import { TimezoneManager } from './common/TimezoneManager';
 
 export class CalParser {
     public calendar: Calendar = new Calendar();
-    private parseState: ParseState = ParseState.ParseInit;
 
     public parseCal = (str: string): void => {
         const lfStr = str.replace(/\r\n/g, '\n');
@@ -38,7 +37,7 @@ export class CalParser {
         });
 
         const respStream = resp.data as ReadStream;
-        return await this.fromReadStream(respStream);
+        return this.fromReadStream(respStream);
     };
 
     public fromFile = async (path: string): Promise<Calendar> => {
@@ -48,6 +47,7 @@ export class CalParser {
 
     public fromReadStream = (respStream: ReadStream): Promise<Calendar> => {
         let cachedStr = '';
+        let hasInit = false;
         const eventParser = new EventParser();
         return new Promise<Calendar>((resolve, reject) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,53 +60,28 @@ export class CalParser {
                     throw new Error('Unsupported stream type, need to be string or Buffer');
                 }
 
-                switch (this.parseState) {
-                    case ParseState.ParseInit: {
-                        this.parseState = ParseState.ProductId;
-                        break;
+                if (!hasInit) {
+                    if (!this.findProductId(cachedStr)) {
+                        reject(new Error('Product ID not found'));
                     }
 
-                    case ParseState.ProductId: {
-                        if (this.findProductId(cachedStr)) {
-                            this.parseState = ParseState.DefaultTz;
-                        } else {
-                            this.parseState = ParseState.ParseError;
-                        }
-                        break;
+                    if (!this.findDefaultTimezone(cachedStr)) {
+                        reject(new Error('Default timezone not found'));
                     }
 
-                    case ParseState.DefaultTz: {
-                        if (this.findDefaultTimezone(cachedStr)) {
-                            this.parseState = ParseState.Event;
-                        } else {
-                            this.parseState = ParseState.ParseError;
-                        }
-                        break;
-                    }
-
-                    case ParseState.Event: {
-                        if (!ComponentParser.hasBegin(cachedStr, ComponentType.Event)) break; // Just repeat again if there's no BEGIN:VEVENT found
-                        const vevents = ComponentParser.findComponents(cachedStr, ComponentType.Event);
-                        for (const vevent of vevents.components) {
-                            this.calendar.events.push(eventParser.parseComponent(vevent));
-                        }
-
-                        cachedStr = cachedStr.substring(vevents.tailIndex);
-                        break;
-                    }
-
-                    case ParseState.Todo: {
-                        break;
-                    }
-
-                    case ParseState.ParseError: {
-                        reject(new Error('Default timezone or product ID not found'));
-                    }
+                    hasInit = true;
                 }
+
+                if (!ComponentParser.hasBegin(cachedStr, ComponentType.Event)) return; // Just repeat again if there's no BEGIN:VEVENT found
+                const vevents = ComponentParser.findComponents(cachedStr, ComponentType.Event);
+                for (const vevent of vevents.components) {
+                    this.calendar.events.push(eventParser.parseComponent(vevent));
+                }
+
+                cachedStr = cachedStr.substring(vevents.tailIndex);
             });
 
             respStream.on('end', () => {
-                this.parseState = ParseState.Done;
                 resolve(this.calendar);
             });
         });
@@ -132,15 +107,19 @@ export class CalParser {
         // Find default timezone (if exists)
         const tzMgr = TimezoneManager.getInstance();
         const tzResult = str.match(/(((?<=\nTZID\:)|(?<=\nTZID\;VALUE\=TEXT\:)|(?<=\nX-WR-TIMEZONE\:)|(?<=\nX-WR-TIMEZONE\;VALUE\=TEXT\:))(.*))/);
-        if (tzResult !== null && DateTime.local().setZone(tzResult[0]).isValid) {
+        if (tzResult !== null) {
             if (!tzMgr.msMode) {
                 this.calendar.timezone = tzResult[0].replace('"', '');
             } else {
                 const lutResult = MSTimezoneLUT.get(tzResult[0].replace('"', ''));
-                this.calendar.timezone = lutResult ? lutResult : 'Etc/GMT';
+                if (lutResult !== undefined) {
+                    this.calendar.timezone = lutResult;
+                } else {
+                    this.calendar.timezone = 'Etc/GMT';
+                }
             }
             tzMgr.defaultTimezone = this.calendar.timezone;
-            return true;
+            return DateTime.local().setZone(tzMgr.defaultTimezone).isValid;
         } else {
             return false;
         }
