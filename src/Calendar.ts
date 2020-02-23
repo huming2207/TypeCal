@@ -6,7 +6,7 @@ export class Calendar {
     public events: EventComponent[] = [];
 
     @autoserializeAs('timezone')
-    public timezone: string | undefined = undefined;
+    public timezone = '';
 
     @autoserializeAs('productId')
     public productId = '';
