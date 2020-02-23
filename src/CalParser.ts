@@ -7,9 +7,7 @@ import { Calendar } from './Calendar';
 import { DateTime } from 'luxon';
 import axios from 'axios';
 import { MSTimezoneLUT } from './common/MSTimezoneLut';
-import { ReadStream } from 'fs';
-import { ParseState } from './common/ParseState';
-import fs from 'fs';
+import fs, { ReadStream } from 'fs';
 import { TimezoneManager } from './common/TimezoneManager';
 
 export class CalParser {
