@@ -1,12 +1,8 @@
 import { ComponentParser } from './ComponentParser';
 import { AlarmComponent } from '../../components/AlarmComponent';
-import { StringParser } from '../ValueParsers/StringParser';
-import { NumberParser } from '../ValueParsers/NumberParser';
 import { DurationParser } from '../ValueParsers/DurationParser';
 
 export class AlarmParser extends ComponentParser<AlarmComponent> {
-    private stringParser = new StringParser();
-    private numberParser = new NumberParser();
     private durationParser = new DurationParser();
 
     public parseComponent = (rawStr: string): AlarmComponent => {
