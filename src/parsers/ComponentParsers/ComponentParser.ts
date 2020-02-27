@@ -1,7 +1,15 @@
 import { ComponentType } from '../../components/Component';
 import { StringHelper } from '../../common/StringHelper';
+import { StringParser } from '../ValueParsers/StringParser';
+import { NumberParser } from '../ValueParsers/NumberParser';
+import { DateTimeParser } from '../ValueParsers/DateTimeParser';
+import { CalAddressParser } from '../ValueParsers/CalAddressParser';
 
 export abstract class ComponentParser<T> {
+    protected stringParser = new StringParser();
+    protected numberParser = new NumberParser();
+    protected dateTimeParser = new DateTimeParser();
+    protected calAddrParser = new CalAddressParser();
     abstract parseComponent(rawStr: string): T;
     public static findComponents = (rawStr: string, type: ComponentType): { components: string[]; tailIndex: number } => {
         let beginIndex = 0;
@@ -44,6 +52,32 @@ export abstract class ComponentParser<T> {
 
     public static hasValidComponent = (rawStr: string, type: ComponentType): boolean => {
         return rawStr.includes(`BEGIN:${type}`) && rawStr.includes(`END:${type}`);
+    };
+
+    protected writeKvPairsToObj = (obj: {}, kvPair: Map<string, string[]>): void => {
+        Object.keys(obj).forEach((key: string) => {
+            if (!key.startsWith('_')) return;
+
+            const calKey = key.substring(1).toUpperCase();
+            const calVal = kvPair.get(calKey);
+            if (calVal === undefined) return;
+
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+            if (typeof (obj as any)[key] === 'string') {
+                (obj as any)[key] = this.stringParser.parse(calVal[0]);
+            } else if (typeof (obj as any)[key] === 'number') {
+                (obj as any)[key] = this.numberParser.parse(calVal[0]);
+            } else if (typeof (obj as any)[key] === 'object') {
+                if (this.dateTimeParser.propNames.includes(calKey)) {
+                    (obj as any)[key] = this.dateTimeParser.parse(calVal[0]);
+                } else if (this.calAddrParser.propNames.includes(calKey)) {
+                    for (const calCurrVal of calVal) {
+                        (obj as any)[key].push(this.calAddrParser.parse(calCurrVal));
+                    }
+                }
+            }
+            /* eslint-enable @typescript-eslint/no-explicit-any */
+        });
     };
 
     protected static strToKvPairs = (rawStr: string): Map<string, string[]> => {
