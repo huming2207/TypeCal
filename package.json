@@ -36,7 +36,7 @@
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
-    "@types/jest": "^25.0.0",
+    "@types/jest": "^26.0.0",
     "@types/node": "^12.7.11",
     "@types/omit-empty": "^1.0.0",
     "axios": "^0.19.2",
