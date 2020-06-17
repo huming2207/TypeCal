@@ -1,4 +1,4 @@
-import { ComponentType } from '../../components/Component';
+import { ComponentType, BaseComponent } from '../../components/Component';
 import { StringHelper } from '../../common/StringHelper';
 import { StringParser } from '../ValueParsers/StringParser';
 import { NumberParser } from '../ValueParsers/NumberParser';
@@ -54,7 +54,7 @@ export abstract class ComponentParser<T> {
         return rawStr.includes(`BEGIN:${type}`) && rawStr.includes(`END:${type}`);
     };
 
-    protected writeKvPairsToObj = (obj: {}, kvPair: Map<string, string[]>): void => {
+    protected writeKvPairsToObj = (obj: BaseComponent, kvPair: Map<string, string[]>): void => {
         Object.keys(obj).forEach((key: string) => {
             if (!key.startsWith('_')) return;
 

@@ -11,9 +11,7 @@ export class DurationParser implements ValueParser<CalDuration> {
             if (related === null) throw SyntaxError(`Cannot parse CalDuration property: ${rawStr}, invalid RELATED parameter.`);
             calDuration.related = related[0];
             const durationStr = rawStr.split(':', 2)[1];
-            const duration = Duration.fromISO(durationStr)
-                .shiftTo('seconds')
-                .toObject().seconds;
+            const duration = Duration.fromISO(durationStr).shiftTo('seconds').toObject().seconds;
             if (duration === undefined) throw SyntaxError(`Cannot parse CalDuration property: ${rawStr}, invalid duration.`);
             calDuration.durationSec = duration;
         } else if (rawStr.includes('VALUE=DATE-TIME')) {
@@ -24,9 +22,7 @@ export class DurationParser implements ValueParser<CalDuration> {
             // Scenario 3: Assume it's a duration-only scenario
             const neg = rawStr.startsWith('-');
             const durationStr = neg ? rawStr.substring(1) : rawStr;
-            const duration = Duration.fromISO(durationStr)
-                .shiftTo('seconds')
-                .toObject();
+            const duration = Duration.fromISO(durationStr).shiftTo('seconds').toObject();
             const durationSec = duration.seconds;
             if (durationSec === undefined) {
                 throw SyntaxError(`Cannot parse CalDuration property: ${durationStr}, invalid duration.`);

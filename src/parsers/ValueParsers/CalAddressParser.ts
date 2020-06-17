@@ -18,7 +18,7 @@ export class CalAddressParser implements ValueParser<CalAddress> {
         const calAddr = new CalAddress();
 
         /* eslint-disable @typescript-eslint/no-explicit-any */
-        Object.keys(calAddr).forEach(key => {
+        Object.keys(calAddr).forEach((key) => {
             if (!key.startsWith('_')) return;
 
             const calKey = key.substring(1).toUpperCase();
