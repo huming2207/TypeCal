@@ -39,7 +39,7 @@
     "@types/jest": "^26.0.0",
     "@types/node": "^14.0.13",
     "@types/omit-empty": "^1.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "cerialize": "^0.1.18",
     "luxon": "^1.24.1",
     "moment": "^2.26.0",
