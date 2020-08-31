@@ -52,7 +52,7 @@
     "typestate": "^1.0.6"
   },
   "devDependencies": {
-    "@babel/polyfill": "7.10.4",
+    "@babel/polyfill": "7.11.5",
     "@types/luxon": "1.24.4",
     "@typescript-eslint/eslint-plugin": "3.10.1",
     "@typescript-eslint/parser": "3.10.1",
