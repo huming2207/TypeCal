@@ -9,7 +9,7 @@ export class CalDuration {
         return this._durationSec;
     }
 
-    public set durationSec(value) {
+    public set durationSec(value: number) {
         this._durationSec = value;
     }
 
@@ -20,7 +20,7 @@ export class CalDuration {
         return this._atDate;
     }
 
-    public set atDate(value) {
+    public set atDate(value: Date) {
         this._atDate = value;
     }
 

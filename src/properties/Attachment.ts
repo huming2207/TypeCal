@@ -8,7 +8,7 @@ export class Attachment {
         return this._mimeType;
     }
 
-    public set mimeType(value) {
+    public set mimeType(value: string) {
         this._mimeType = value;
     }
 
@@ -19,7 +19,7 @@ export class Attachment {
         return this._url;
     }
 
-    public set url(value) {
+    public set url(value: string) {
         this._url = value;
     }
 }

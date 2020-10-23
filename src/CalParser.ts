@@ -30,7 +30,7 @@ export class CalParser {
     };
 
     public fromURL = async (url: string): Promise<Calendar> => {
-        const resp = await axios.get(url, { responseType: 'stream' }).catch(err => {
+        const resp = await axios.get(url, { responseType: 'stream' }).catch((err) => {
             throw err;
         });
 
