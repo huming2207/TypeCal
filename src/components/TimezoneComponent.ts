@@ -8,7 +8,7 @@ export class TimezoneComponent {
         return this._tzid;
     }
 
-    public set tzid(value) {
+    public set tzid(value: string) {
         this._tzid = value;
     }
 }
