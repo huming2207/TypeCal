@@ -41,7 +41,7 @@
     "@types/omit-empty": "^1.0.0",
     "axios": "^0.21.0",
     "cerialize": "^0.1.18",
-    "luxon": "^1.25.0",
+    "luxon": "^2.5.2",
     "moment": "^2.29.1",
     "omit-empty": "^1.0.0",
     "query-string": "^6.13.6",
